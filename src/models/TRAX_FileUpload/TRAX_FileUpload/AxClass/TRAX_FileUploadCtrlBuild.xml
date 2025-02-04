@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>TRAX_FileUploadCtrlBuild</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+[FormDesignControlAttribute("TRAX File Upload")]
+public class TRAX_FileUploadCtrlBuild extends FormBuildContainerControl
+{
+    #define.ControllerPropertyCategoryName('Controller')
+    str s_controlLabel;
+    str s_dataSourceName;
+    str s_fileNameField;
+    str s_fileUrlField;
+
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>parmControlLabelText</Name>
+				<Source><![CDATA[
+    [FormDesignPropertyAttribute('Label', #ControllerPropertyCategoryName)]
+    public str parmControlLabelText(str _controlLabel = s_controlLabel)
+    {
+        s_controlLabel = _controlLabel;
+        return s_controlLabel;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmDataSourceName</Name>
+				<Source><![CDATA[
+    [FormDesignPropertyAttribute('Data Source', #ControllerPropertyCategoryName),
+    FormDesignPropertyDataSourceAttribute]
+    public str parmDataSourceName(str _datasourceName = s_dataSourceName)
+    {
+        s_dataSourceName = _datasourceName;
+        return s_dataSourceName;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmFileNameField</Name>
+				<Source><![CDATA[
+    [FormDesignPropertyAttribute('File Name Field', #ControllerPropertyCategoryName),
+    FormDesignPropertyDataFieldAttribute(methodstr(TRAX_FileUploadCtrlBuild, parmDataSourceName))]
+    public str parmFileNameField(str _fileNameField = s_fileNameField)
+    {
+        s_fileNameField = _fileNameField;
+        return s_fileNameField;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>parmFileUrlField</Name>
+				<Source><![CDATA[
+    [FormDesignPropertyAttribute('File Url Field', #ControllerPropertyCategoryName),
+    FormDesignPropertyDataFieldAttribute(methodstr(TRAX_FileUploadCtrlBuild, parmDataSourceName))]
+    public str parmFileUrlField(str _fileUrlField = s_fileUrlField)
+    {
+        s_fileUrlField = _fileUrlField;
+        return s_fileUrlField;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

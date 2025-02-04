@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>TRAX_FileUploadCtrl</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+[FormControlAttribute("TRAX_FileUploadCtrl",
+                      "",
+                      classstr(TRAX_FileUploadCtrlBuild))]
+public class TRAX_FileUploadCtrl extends FormTemplateContainerControl
+{
+    private const str MAIN_GROUP_NAME = '_MainGroup';
+
+    // The group control containing all other controls
+    private FormGroupControl s_mainGroupControl;
+    private const str s_templateId = 'Group';
+    private str s_controlName;
+    private str s_controlLabel;
+    
+    private str s_fileName;
+    private str s_fileUrl;
+
+    private boolean s_isBuildApplied = false;
+
+    private str s_dataSourceName;
+    private FieldName s_fileNameField;
+    private FieldName s_fileUrlField;
+
+    private FieldId s_fileNameFieldId;
+    private FieldId s_fileUrlFieldId;
+
+    private FormDataSource s_formDataSource;
+
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>new</Name>
+				<Source><![CDATA[
+    public void new(FormBuildControl _build, FormRun _formRun)
+    {
+        super(_build, _formRun);
+
+        this.setTemplateId(s_templateId);
+        this.setResourceBundleName('');
+
+        s_controlName = this.name();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>applyBuild</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Applies the <c>TRAX_FileUploadCtrlBuild</c> object for this control.
+    /// </summary>
+    public void applyBuild()
+    {
+        if (s_isBuildApplied)
+        {
+            // The build can only be applied once.
+            throw error(Error::wrongUseOfFunction(funcname()));
+        }
+        
+        s_isBuildApplied = true;
+
+        super();
+
+        TRAX_FileUploadCtrlBuild build = this.build();
+
+        if (build)
+        {
+            s_dataSourceName = build.parmDataSourceName();
+            s_fileNameField = build.parmFileNameField();
+            s_fileUrlField = build.parmFileUrlField();
+
+            s_controlLabel = build.parmControlLabelText(); 
+            if (s_dataSourceName)
+            {
+                s_formDataSource = this.formRun().dataSource(s_dataSourceName);
+
+                if (s_formDataSource)
+                {
+                    s_formDataSource.OnActivated += eventhandler(this.onDataSourceActivated);
+                    s_formDataSource.OnDeleted += eventhandler(this.OnDatasourceDeleted);
+
+                    if (s_fileNameField)
+                    {
+                        s_fileNameFieldId = fieldName2Id(s_formDataSource.table(), s_fileNameField);
+                    }
+
+                    if (s_fileUrlField)
+                    {
+                        s_fileUrlFieldId = fieldName2Id(s_formDataSource.table(), s_fileUrlField);
+                    }
+                }
+            }
+
+            this.buildControls();
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>onDatasourceActivated</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Handles the datasource OnActivated event.
+    /// </summary>
+    /// <param name="_dataSource">
+    /// The datasource raising the event.
+    /// </param>
+    /// <param name="_eventArgs">
+    /// The <c>FormDataSourceEventArgs</c> instance.
+    /// </param>
+    private void onDatasourceActivated(FormDataSource _dataSource, FormDataSourceEventArgs _eventArgs)
+    {
+        if (s_fileNameField)
+        {
+            s_fileName = _dataSource.cursor().(s_fileNameFieldId);
+            s_fileUrl = _dataSource.cursor().(s_fileUrlFieldId);
+
+            this.buildControls();
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>OnDatasourceDeleted</Name>
+				<Source><![CDATA[
+    private void OnDatasourceDeleted(FormDataSource _dataSource, FormDataSourceEventArgs _eventArgs)
+    {
+        this.removeMainGroupControl();
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>buildControls</Name>
+				<Source><![CDATA[
+    private void buildControls()
+    {
+        // Remove the previous controls
+        this.createMainGroupControl();
+
+        boolean recordExists;
+        if (s_formDataSource)
+        {
+            recordExists = s_formDataSource.cursor() != null;
+        }
+
+        FormStaticTextControl labelControl = s_mainGroupControl.addControl(FormControlType::StaticText, strFmt('%1%2', s_controlName, "Label"));
+        labelControl.text(strFmt("%1", s_controlLabel));
+        labelControl.enabled(recordExists);
+
+        FormStringControl stringControl = s_mainGroupControl.addControl(FormControlType::String, strFmt('%1%2', s_controlName, "Text"));
+        stringControl.text(strFmt("%1", s_fileName));
+        stringControl.allowEdit(false);
+        //stringControl.viewEditMode(ViewEditMode::Edit);
+        stringControl.enabled(recordExists);
+
+        FormButtonControl uploadButton = s_mainGroupControl.addControl(FormControlType::Button, strFmt('%1%2', s_controlName, "Upload"));
+        uploadButton.text("Upload");
+        //uploadButton.enabled(recordExists);
+
+        FormButtonControl downloadButton = s_mainGroupControl.addControl(FormControlType::Button, strFmt('%1%2', s_controlName, "Download"));
+        downloadButton.text("Download");
+        //downloadButton.enabled(recordExists);
+        
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>createMainGroupControl</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Remove the group containing every control and create a new group.
+    /// </summary>
+    private void createMainGroupControl()
+    {
+        this.removeMainGroupControl();
+        
+        // Initialize the group that will contain all the controls
+        s_mainGroupControl = this.addControl(FormControlType::Group, strFmt('%1%2', s_controlName, MAIN_GROUP_NAME));
+        s_mainGroupControl.columns(4);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>removeMainGroupControl</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Remove the group containing the display controls.
+    /// </summary>
+    private void removeMainGroupControl()
+    {
+        if (s_mainGroupControl)
+        {
+            // If the group containing every control exists then remove it
+            this.formRun().design().removeControl(s_mainGroupControl.id());
+        }
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

@@ -1,0 +1,18 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/src/projects/TRAX_FileUpload/TRAX_FileUpload/obj/Debug
+/src/projects/TRAX_FileUpload/.vs/TRAX_FileUpload
+/src/models/TRAX_FileUpload/XppMetadata/TRAX_FileUpload/AxClass
+/src/models/TRAX_FileUploadTest/XppMetadata/TRAX_FileUploadTest/AxForm
+/src/models/TRAX_FileUpload/bin
+/src/models/TRAX_FileUpload/BuildProjectResult.err.xml
+/src/models/TRAX_FileUpload/BuildProjectResult.log
+/src/models/TRAX_FileUpload/BuildProjectResult.xml
+/src/models/TRAX_FileUploadTest/bin
+/src/models/TRAX_FileUploadTest/BuildProjectResult.err.xml
+/src/models/TRAX_FileUploadTest/BuildProjectResult.log
+/src/models/TRAX_FileUploadTest/BuildProjectResult.xml
+/src/models/TRAX_FileUploadTest/XppMetadata/TRAX_FileUploadTest/AxTable
