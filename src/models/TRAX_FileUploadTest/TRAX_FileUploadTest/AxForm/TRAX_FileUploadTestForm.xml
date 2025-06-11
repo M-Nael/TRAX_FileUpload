@@ -29,8 +29,9 @@ public class TRAX_FileUploadTestForm extends FormRun
         if (!testRec)
         {
             testRec.clear();
-            testRec.FileName = 'TestFile';
-            testRec.FileUrl = 'http://www.google.com';
+            testRec.Id = "1"; // Assuming Id is an integer field
+            //testRec.FileName = 'TestFile';
+            //testRec.FileUrl = 'http://www.google.com';
             testRec.insert();
         }
 
@@ -59,6 +60,9 @@ public class TRAX_FileUploadTestForm extends FormRun
 					<DataField>FileUrl</DataField>
 				</AxFormDataSourceField>
 				<AxFormDataSourceField>
+					<DataField>Id</DataField>
+				</AxFormDataSourceField>
+				<AxFormDataSourceField>
 					<DataField>Partition</DataField>
 				</AxFormDataSourceField>
 				<AxFormDataSourceField>
@@ -69,6 +73,8 @@ public class TRAX_FileUploadTestForm extends FormRun
 				</AxFormDataSourceField>
 			</Fields>
 			<ReferencedDataSources />
+			<AllowCreate>No</AllowCreate>
+			<AllowDelete>No</AllowDelete>
 			<InsertIfEmpty>No</InsertIfEmpty>
 			<DataSourceLinks />
 			<DerivedDataSources />
@@ -78,6 +84,15 @@ public class TRAX_FileUploadTestForm extends FormRun
 		<Caption xmlns="">Testing file upload control</Caption>
 		<Pattern xmlns="">Custom</Pattern>
 		<Controls xmlns="">
+			<AxFormControl xmlns=""
+				i:type="AxFormStringControl">
+				<Name>TRAX_FileUploadTestTable_Id</Name>
+				<Type>String</Type>
+				<FormControlExtension
+					i:nil="true" />
+				<DataField>Id</DataField>
+				<DataSource>TRAX_FileUploadTestTable</DataSource>
+			</AxFormControl>
 			<AxFormControl xmlns=""
 				i:type="AxFormContainerControl">
 				<Name>TRAX_FileUploadCtrl1</Name>
@@ -89,7 +104,7 @@ public class TRAX_FileUploadTestForm extends FormRun
 						<AxFormControlExtensionProperty>
 							<Name>parmControlLabelText</Name>
 							<Type>String</Type>
-							<Value>Upload file</Value>
+							<Value>Selected file</Value>
 						</AxFormControlExtensionProperty>
 						<AxFormControlExtensionProperty>
 							<Name>parmDataSourceName</Name>
@@ -120,12 +135,11 @@ public class TRAX_FileUploadTestForm extends FormRun
 						<AxFormControlExtensionProperty>
 							<Name>fileTypesAccepted</Name>
 							<Type>String</Type>
-							<Value>*.PDF,*.TXT</Value>
 						</AxFormControlExtensionProperty>
 						<AxFormControlExtensionProperty>
 							<Name>fileNameLabel</Name>
 							<Type>String</Type>
-							<Value>File name</Value>
+							<Value>MS Uploader</Value>
 						</AxFormControlExtensionProperty>
 						<AxFormControlExtensionProperty>
 							<Name>browseText</Name>

@@ -34,10 +34,16 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Classes\" />
     <Folder Include="Forms\" />
     <Folder Include="Tables\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AxClass\TRAX_FIleUploadRunnableClass">
+      <SubType>Content</SubType>
+      <Name>TRAX_FIleUploadRunnableClass</Name>
+      <Link>Classes\TRAX_FIleUploadRunnableClass</Link>
+    </Content>
     <Content Include="AxForm\TRAX_FileUploadTestForm">
       <SubType>Content</SubType>
       <Name>TRAX_FileUploadTestForm</Name>

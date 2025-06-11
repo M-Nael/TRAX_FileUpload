@@ -66,6 +66,20 @@ public class TRAX_FileUploadCtrlBuild extends FormBuildContainerControl
 
 ]]></Source>
 			</Method>
+			<Method>
+				<Name>uploadButtonClicked</Name>
+				<Source><![CDATA[
+    public void uploadButtonClicked(FormButtonControl _sender, FormControlEventArgs _args)
+    {
+        // Handle the button click event here
+        info(strFmt("Button %1 clicked", _sender.name()));
+        
+        // You can add your upload/download logic here
+        // For example, you might want to open a file dialog or trigger a file upload process
+    }
+
+]]></Source>
+			</Method>
 		</Methods>
 	</SourceCode>
 </AxClass>

@@ -16,3 +16,5 @@
 /src/models/TRAX_FileUploadTest/BuildProjectResult.log
 /src/models/TRAX_FileUploadTest/BuildProjectResult.xml
 /src/models/TRAX_FileUploadTest/XppMetadata/TRAX_FileUploadTest/AxTable
+*.log
+*.xml

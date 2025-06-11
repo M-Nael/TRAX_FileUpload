@@ -164,11 +164,58 @@ public class TRAX_FileUploadCtrl extends FormTemplateContainerControl
         FormButtonControl uploadButton = s_mainGroupControl.addControl(FormControlType::Button, strFmt('%1%2', s_controlName, "Upload"));
         uploadButton.text("Upload");
         //uploadButton.enabled(recordExists);
+        uploadButton.registerOverrideMethod(methodStr(FormButtonControl, clicked),
+                                            methodStr(TRAX_FileUploadCtrl, uploadButtonClicked),
+                                            this);
+
 
         FormButtonControl downloadButton = s_mainGroupControl.addControl(FormControlType::Button, strFmt('%1%2', s_controlName, "Download"));
         downloadButton.text("Download");
         //downloadButton.enabled(recordExists);
         
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>uploadButtonClicked</Name>
+				<Source><![CDATA[
+    public void uploadButtonClicked(FormButtonControl  _sender)
+    {
+        FileUploadTemporaryStorageResult uploadResult;
+        FileUploadBuild fileUploadBuild = new FileUploadBuild();
+
+        // Let the user select the file to upload
+        uploadResult = File::GetFileFromUser();
+
+        if (uploadResult != null && uploadResult.getUploadStatus())
+        {
+            // Get the temporary blob URL and metadata
+            System.IO.Stream fileStream = uploadResult.openResult();
+            str fileName = uploadResult.getFileName();
+
+            // Create a document management attachment
+            DocuType docuType = DocuType::find("File"); // Make sure this exists or create a custom one
+            DocuRef docuRef;
+
+            ttsbegin;
+            docuRef.clear();
+            docuRef.RefTableId  = tableNum(MyTargetTable); // Replace with your target table
+            docuRef.RefRecId    = 5637144576;              // Replace with your target RecId
+            docuRef.TypeId      = docuType.TypeId;
+            docuRef.Name        = fileName;
+            docuRef.insert();
+
+            // Store the file in Azure Blob Storage
+            DocuValue docuValue = DocumentManagement::storeFile(docuRef, fileStream, fileName);
+
+            info(strFmt("File uploaded: %1", docuValue.FileName));
+            ttscommit;
+        }
+        else
+        {
+            error("File upload failed or canceled.");
+        }
     }
 
 ]]></Source>
